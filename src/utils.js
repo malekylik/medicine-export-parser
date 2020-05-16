@@ -4,7 +4,21 @@ const {
   SCRIPT_ARGUMENTS_START_INDEX,
   SUPPORTED_TYPES,
 } = require('./const');
-const { createOkResult, createErrorResult } = require('./result');
+const { createOkResult, createErrorResult, showCSVRow } = require('./result');
+
+function getMaximumValue(arr, getValue = id => id) {
+  let max = arr.length > 0 ? getValue(arr[0]) : undefined;
+
+  for (let i = 1; i < arr.length; i++) {
+    const v = getValue(arr[i]);
+
+    if (max < v) {
+      max = v;
+    }
+  }
+
+  return max;
+}
 
 function isArg(arg) {
   return /^-/.test(arg);
@@ -78,4 +92,5 @@ function parseSriptArguments(args) {
 
 module.exports = {
   parseSriptArguments,
+  getMaximumValue,
 };
