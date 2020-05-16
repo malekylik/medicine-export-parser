@@ -9,6 +9,6 @@ if (isResultError(parsedArgs)) {
   return;
 }
 
-console.log(parsedArgs);
+console.log('parsedArgs', parsedArgs.value, parsedArgs.value.args);
 
 

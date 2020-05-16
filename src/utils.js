@@ -37,6 +37,18 @@ function splitArgs(args) {
   return splitedArgs;
 }
 
+function parseParam(arg) {
+  let res = arg.match(/(^-(\w+)(=(\w+))?)/);
+
+  if (!res) {
+    res = arg.match(/^--(\w+)/);
+
+    return [res[1], null];
+  }
+
+  return [res[2], res[4] || null];
+}
+
 function parseSriptArguments(args) {
   const params = args.slice(SCRIPT_ARGUMENTS_START_INDEX);
 
@@ -50,8 +62,6 @@ function parseSriptArguments(args) {
   const splitedArgs = splitArgs(params);
   const supportedFiles = splitedArgs.paths.filter(isSupportedFileType);
 
-  console.log('supportedFiles', supportedFiles);
-
   if (supportedFiles.length === 0) {
     return createErrorResult('File to open should be passed');
   }
@@ -60,10 +70,12 @@ function parseSriptArguments(args) {
     return createErrorResult('Multiple files is not supported');
   }
 
-  return createOkResult(args);
+  parsedArgs.file = supportedFiles[0];
+  parsedArgs.args = Object.fromEntries(splitedArgs.args.map(parseParam));
+
+  return createOkResult(parsedArgs);
 }
 
 module.exports = {
   parseSriptArguments,
 };
-
