@@ -1,3 +1,14 @@
 const { parseSriptArguments } = require('./utils');
+const { isResultError } = require('./result');
 
-console.log(parseSriptArguments(process.argv));
+const parsedArgs = parseSriptArguments(process.argv);
+
+if (isResultError(parsedArgs)) {
+  console.log(parsedArgs.value);
+
+  return;
+}
+
+console.log(parsedArgs);
+
+
